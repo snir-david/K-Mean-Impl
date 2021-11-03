@@ -20,8 +20,7 @@ def find_new_centroids(pixel_to_centroids_list, old_cent):
         num_of_pixels = len(pixel_to_centroids_list[i])
         if num_of_pixels > 0:
             new_cent = sum_pixels / num_of_pixels
-            new_centroids.append(new_cent.round(4)
-                                 )
+            new_centroids.append(new_cent.round(4))
         else:
             new_centroids.append(old_cent[i])
 
@@ -41,16 +40,18 @@ def find_closest_centroids(pixel, centroids):
 
 
 def k_means(pixels_list, centroids_list, output_file):
-    pixels_to_centroids = []
+    new_cent = []
     coverage = 0
     old_cent = centroids_list
-    for i in range(len(centroids_list)):
-        pixels_to_centroids.append([])
     for i in range(20):
         if coverage < 2:
+            pixels_to_centroids = []
+            for j in range(len(centroids_list)):
+                pixels_to_centroids.append([])
             for pixel in pixels_list:
                 id = find_closest_centroids(pixel, centroids_list)
                 pixels_to_centroids[id].append(pixel)
+            old_cent = centroids_list
             new_cent = find_new_centroids(pixels_to_centroids, centroids_list)
             print("iter: ")
             print(i)
@@ -58,6 +59,8 @@ def k_means(pixels_list, centroids_list, output_file):
             compare = old_cent == new_cent
             if compare.all():
                 coverage += 1
+                print(coverage)
+                centroids_list = new_cent
             else:
                 centroids_list = new_cent
 
